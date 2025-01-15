@@ -1799,6 +1799,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitsParent: {fileID: 2992182}
+  points:
+  - {fileID: 469494301}
+  - {fileID: 1288626313}
+  - {fileID: 939159085}
+  - {fileID: 1044057951}
+  - {fileID: 2069813326}
+  - {fileID: 307690803}
+  - {fileID: 366316663}
+  - {fileID: 1999558355}
+  - {fileID: 2119056425}
 --- !u!1001 &1013702324
 PrefabInstance:
   m_ObjectHideFlags: 0

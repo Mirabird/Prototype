@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entities;
 using Game.GameEngine.Ecs;
 using UnityEngine;
@@ -23,10 +24,16 @@ public class PatrolBehavior : MonoBehaviour
     private Transform currentEnemy = null; // Текущий враг, с которым ведется бой
 
     private bool isInCombat = false; // Флаг для контроля боевого состояния
+
+    private readonly List<Transform> _patrolPoints = new();
     private void Awake()
     {
         character = GetComponent<CharacterEntity>();
         animator = GetComponentInChildren<Animator>();
+    }
+    public void SetPoints(IEnumerable<Transform> points)
+    {
+        patrolPoints = points.ToArray();
     }
     private void Update()
     {
@@ -86,29 +93,7 @@ public class PatrolBehavior : MonoBehaviour
             }
         }
     }
-    private void SetPoints()
-    {
-        Transform testFolder = GameObject.Find("[TEST]")?.transform;
-        if (testFolder == null)
-        {
-            Debug.LogWarning("Папка '[TEST]' не найдена!");
-            patrolPoints = new Transform[0]; // Назначаем пустой массив
-            return;
-        }
-        patrolPoints = testFolder.GetComponentsInChildren<Transform>()
-            .Where(t => t != testFolder && t.name.StartsWith("Point") && t.gameObject.activeInHierarchy) // Исключаем саму папку и проверка на активность
-            .OrderBy(t => t.name)
-            .ToArray();
-
-        if (patrolPoints.Length == 0)
-        {
-            Debug.LogWarning("В папке '[TEST]' не найдены активные объекты с именем 'Point'!");
-        }
-        else
-        {
-            Debug.Log($"Найдено {patrolPoints.Length} точек для патрулирования.");
-        }
-    }
+   
     private void PatrolMovement()
     {
         if (patrolPoints.Length == 0) return;
@@ -161,8 +146,6 @@ public class PatrolBehavior : MonoBehaviour
     // Запуск патрулирования
     public void StartPatrolling()
     {
-        SetPoints();
-        
         if (patrolPoints == null || patrolPoints.Length == 0)
         {
             Debug.LogWarning("Точки патрулирования не найдены! Патрулирование невозможно.");
